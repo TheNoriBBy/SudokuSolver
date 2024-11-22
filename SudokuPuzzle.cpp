@@ -10,22 +10,29 @@ SudokuPuzzle::SudokuPuzzle() : debug(false) {
     }
 }
 
-void SudokuPuzzle::generate() {
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::vector<int> numbers = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
-
-    for (int i = 0; i < 9; ++i) {
-        std::shuffle(numbers.begin(), numbers.end(), gen);
-        for (int j = 0; j < 9; ++j) {
-            if (canPlace(i, j, numbers[j])) {
-                setBoardValue(i, j, numbers[j]);
-            }
-        }
+bool SudokuPuzzle::generate(int x, int y) {
+    if (x == 9) {
+        return true; 
+    }
+    if (y == 9) {
+        return generate(x + 1, 0);
     }
 
-    solve();
+    std::vector<int> numbers = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+    std::shuffle(numbers.begin(), numbers.end(), std::mt19937(std::random_device()()));
+
+    for (int num : numbers) {
+        if (canPlace(x, y, num)) {
+            setBoardValue(x, y, num);
+            if (generate(x, y + 1)) {
+                return true;
+            }
+            setBoardValue(x, y, 0);
+        }
+    }
+    return false; 
 }
+
 
 bool SudokuPuzzle::canPlace(int x_cord, int y_cord, int value) {
     for (int i = 0; i < 9; i++) {
@@ -89,7 +96,7 @@ bool SudokuPuzzle::solve(int x_cord, int y_cord) {
         }
     }
 
-    board[x_cord][y_cord] = 0; // Reset the cell
+    board[x_cord][y_cord] = 0;
     return false;
 }
 
@@ -108,7 +115,6 @@ bool SudokuPuzzle::verifyValue(int x_cord, int y_cord) {
     printTracerTryingValue(x_cord, y_cord);
     int value = board[x_cord][y_cord];
 
-    // Check row and column
     for (int i = 0; i < 9; i++) {
         if ((i != x_cord && board[i][y_cord] == value) ||
             (i != y_cord && board[x_cord][i] == value)) {
@@ -116,7 +122,6 @@ bool SudokuPuzzle::verifyValue(int x_cord, int y_cord) {
         }
     }
 
-    // Check 3x3 box
     int box_x = x_cord / 3;
     int box_y = y_cord / 3;
     for (int y_verify = box_y * 3; y_verify < box_y * 3 + 3; y_verify++) {
