@@ -10,6 +10,7 @@ private:
     bool solve(int x_cord, int y_cord);
     bool proceedToNext(int x_cord, int y_cord);
     bool verifyValue(int x_cord, int y_cord);
+    bool canPlace(int x_cord, int y_cord, int value);
 
 public:
     SudokuPuzzle();
@@ -17,6 +18,7 @@ public:
     void setBoardValue(int x_cord, int y_cord, int value);
     int getBoardValue(int x_cord, int y_cord) const;
     bool solve();
+    void generate();
 };
 
 #endif
