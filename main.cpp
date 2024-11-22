@@ -4,7 +4,7 @@
 int main(int argc, char* const argv[]) {
     SudokuPuzzle puzzle;
 
-    puzzle.generate(); 
+    puzzle.generate(0, 0); 
     puzzle.print(); 
 
     std::cout << std::endl;
