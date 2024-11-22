@@ -18,7 +18,7 @@ public:
     void setBoardValue(int x_cord, int y_cord, int value);
     int getBoardValue(int x_cord, int y_cord) const;
     bool solve();
-    void generate();
+    bool generate(int x, int y);
 };
 
 #endif
