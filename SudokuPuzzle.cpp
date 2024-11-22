@@ -1,11 +1,50 @@
 #include "SudokuPuzzle.h"
 #include <iostream>
 #include <string>
+#include <random>
+#include <algorithm>
 
 SudokuPuzzle::SudokuPuzzle() : debug(false) {
     for (auto& row : board) {
         std::fill(std::begin(row), std::end(row), 0);
     }
+}
+
+void SudokuPuzzle::generate() {
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::vector<int> numbers = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+
+    for (int i = 0; i < 9; ++i) {
+        std::shuffle(numbers.begin(), numbers.end(), gen);
+        for (int j = 0; j < 9; ++j) {
+            if (canPlace(i, j, numbers[j])) {
+                setBoardValue(i, j, numbers[j]);
+            }
+        }
+    }
+
+    solve();
+}
+
+bool SudokuPuzzle::canPlace(int x_cord, int y_cord, int value) {
+    for (int i = 0; i < 9; i++) {
+        if (board[i][y_cord] == value || board[x_cord][i] == value) {
+            return false;
+        }
+    }
+
+    int box_x = x_cord / 3;
+    int box_y = y_cord / 3;
+    for (int y_verify = box_y * 3; y_verify < box_y * 3 + 3; y_verify++) {
+        for (int x_verify = box_x * 3; x_verify < box_x * 3 + 3; x_verify++) {
+            if (board[x_verify][y_verify] == value) {
+                return false;
+            }
+        }
+    }
+
+    return true;
 }
 
 void SudokuPuzzle::print() const {
