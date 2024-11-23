@@ -33,6 +33,17 @@ bool SudokuPuzzle::generate(int x, int y) {
     return false; 
 }
 
+void SudokuPuzzle::removeNumbers(int count) {
+    int removed = 0;
+    while (removed < count) {
+        int x = rand() % 9;
+        int y = rand() % 9;
+        if (board[x][y] != 0) {
+            board[x][y] = 0;
+            removed++;
+        }
+    }
+}
 
 bool SudokuPuzzle::canPlace(int x_cord, int y_cord, int value) {
     for (int i = 0; i < 9; i++) {
