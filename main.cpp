@@ -5,6 +5,7 @@ int main(int argc, char* const argv[]) {
     SudokuPuzzle puzzle;
 
     puzzle.generate(0, 0); 
+    puzzle.removeNumbers(40);
     puzzle.print(); 
 
     std::cout << std::endl;
